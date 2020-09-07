@@ -32,6 +32,11 @@ function stemmer_types()
     stypes
 end
 
+"""
+    Stemmer(stemmer_type, charenc=UTF_8)
+
+The `Stemmer` object stores a reference to the underlying `libstemmer` handle
+"""
 mutable struct Stemmer
     cptr::Ptr{Cvoid}
     alg::String
@@ -59,6 +64,11 @@ end
 
 Base.show(io::IO, stm::Stemmer) = println(io, "Stemmer algorithm:$(stm.alg) encoding:$(stm.enc)")
 
+"""
+    release(stemmer::Stemmer)
+
+Release resources held by `libstemmer`
+"""
 function release(stm::Stemmer)
     (C_NULL == stm.cptr) && return
     ccall((:sb_stemmer_delete, libstemmer), Cvoid, (Ptr{Cvoid},), stm.cptr)
@@ -85,8 +95,12 @@ function stem(stemmer::Stemmer, bstr::AbstractString)
     String(copy(bytes))
 end
 
+"""
+    stem_all(stemmer::Stemmer, sentence)
 
-function stem_all(stemmer::Stemmer, sentence::AbstractString) where S <: Language
+tokenize the string with the default tokenizer, and then stem each word
+"""
+function stem_all(stemmer::Stemmer, sentence) 
     tokens = tokenize(sentence)
     stemmed = stem(stemmer, tokens)
     join(stemmed, ' ')
