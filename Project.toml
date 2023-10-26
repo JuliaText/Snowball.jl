@@ -1,7 +1,7 @@
 name = "Snowball"
 uuid = "fb8f903a-0164-4e73-9ffe-431110250c3b"
 authors = ["Avik Sengupta", "Julia Computing"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 Languages = "8ef0a80b-9436-5d2c-a485-80b904378c43"
@@ -10,6 +10,7 @@ WordTokenizers = "796a5d58-b03d-544a-977e-18100b691f6e"
 
 [compat]
 Languages = "0.4"
+Snowball_jll = "2"
 WordTokenizers = "0.5"
 julia = "1.3"
 
