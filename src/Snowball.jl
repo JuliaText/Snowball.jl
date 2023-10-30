@@ -78,13 +78,13 @@ end
 
 """
     stem(stemmer::Stemmer, str)
-    stem(stemmer::Stemmer, words::Array)
+    stem(stemmer::Stemmer, words::Vector)
 
 Stem the input with the Stemming algorthm of `stemmer`.
 
-See also: [`stem!`](@ref)
+See also: [`stem_all`](@ref)
 """
-function stem(stemmer::Stemmer, bstr::AbstractString)
+function stem(stemmer::Stemmer, bstr::AbstractString)::String
     sres = ccall((:sb_stemmer_stem, libstemmer),
                 Ptr{UInt8},
                 (Ptr{UInt8}, Ptr{UInt8}, Cint),
@@ -100,19 +100,13 @@ end
 
 tokenize the string with the default tokenizer, and then stem each word
 """
-function stem_all(stemmer::Stemmer, sentence) 
+function stem_all(stemmer::Stemmer, sentence::AbstractString)::String 
     tokens = tokenize(sentence)
     stemmed = stem(stemmer, tokens)
     join(stemmed, ' ')
 end
 
-function stem(stemmer::Stemmer, words::Array)
-    l::Int = length(words)
-    ret = Array{String}(undef, l)
-    for idx in 1:l
-        ret[idx] = stem(stemmer, words[idx])
-    end
-    return ret
-end
+stem(stemmer::Stemmer, words::Vector{<:AbstractString})::Vector{String} =
+    map(w -> stem(stemmer, w), words)
 
 end # module
